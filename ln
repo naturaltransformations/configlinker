@@ -33,10 +33,14 @@ function link_files () {
 while true ; do
     case "$1" in
     --link)
-        for dir in $2; do
+        shift
+        for dir in $@; do
+            if [[ $dir =~ ^--.* ]]; then
+              break
+            fi
+
             link_files $dir
         done
-        shift
     ;;
     --* | -* )
         echo "unknown option $1, please use --help."
