@@ -3,9 +3,9 @@
 
 function link_files () {
     basedir=$1
-    reldir=$2
     current_dir=`pwd`
     cd $basedir
+    basedir=`pwd -P`
     for file in `find . -type f` ; do
         file=${file##./}
         filename=`basename $file`
@@ -23,7 +23,7 @@ function link_files () {
             mkdir -p $target_dir 2>/dev/null
         fi
 
-        $sudo ln -s "$current_dir/$basedir/$file" $target_file
+        $sudo ln -s "$basedir/$file" $target_file
         sudo=""
     done
     cd $current_dir
