@@ -2,51 +2,51 @@
 
 
 function link_files () {
-    basedir=$1
-    cd $basedir
-    basedir=`pwd -P`
-    find . -type f -print0 |
-    while IFS= read -r -d $'\0' file; do
-        file=${file##./}
-        filename=`basename "$file"`
-        target_dir=$(dirname "$file")
-        if [[ $target_dir != "~"* ]]; then
-            target_dir="/${target_dir}"
-            sudo=sudo
-        else
-            target_dir=~/${target_dir##'~'}
-        fi
-        target_file="$target_dir/$filename"
-        $sudo rm -f "$target_file"
-        if [[ ! -d "$target_dir" ]]; then
-            mkdir -p "$target_dir" 2>/dev/null
-        fi
+  basedir=$1
+  cd $basedir
+  basedir=`pwd -P`
+  find . -type f -print0 |
+  while IFS= read -r -d $'\0' file; do
+    file=${file##./}
+    filename=`basename "$file"`
+    target_dir=$(dirname "$file")
+    if [[ $target_dir != "~"* ]]; then
+        target_dir="/${target_dir}"
+        sudo=sudo
+    else
+        target_dir=~/${target_dir##'~'}
+    fi
+    target_file="$target_dir/$filename"
+    $sudo rm -f "$target_file"
+    if [[ ! -d "$target_dir" ]]; then
+        mkdir -p "$target_dir" 2>/dev/null
+    fi
 
-        $sudo ln -s "$basedir/$file" "$target_file"
-        sudo=""
-    done
+    $sudo ln -s "$basedir/$file" "$target_file"
+    sudo=""
+  done
 }
 
 
 while true ; do
     case "$1" in
     --link)
-        shift
-        for dir in $@; do
-            if [[ $dir =~ ^--.* ]]; then
-              break
-            fi
+      shift
+      for dir in $@; do
+        if [[ $dir =~ ^--.* ]]; then
+          break
+        fi
 
-            link_files $dir
-        done
+        link_files $dir
+      done
     ;;
     --* | -* )
-        echo "unknown option $1, please use --help."
-        exit 1
-        ;;
+      echo "unknown option $1, please use --help."
+      exit 1
+      ;;
     * )
-        break
-        ;;
+      break
+      ;;
     esac
     shift
 done
