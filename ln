@@ -9,21 +9,14 @@ function link_files () {
   while IFS= read -r -d $'\0' file; do
     file=${file##./}
     filename=`basename "$file"`
-    target_dir=$(dirname "$file")
-    if [[ $target_dir != "~"* ]]; then
-        target_dir="/${target_dir}"
-        sudo=sudo
-    else
-        target_dir=~/${target_dir##'~'}
-    fi
+    target_dir=~/$(dirname "$file")
     target_file="$target_dir/$filename"
-    $sudo rm -f "$target_file"
+    rm -f "$target_file"
     if [[ ! -d "$target_dir" ]]; then
         mkdir -p "$target_dir" 2>/dev/null
     fi
 
-    $sudo ln -s "$basedir/$file" "$target_file"
-    sudo=""
+    ln -s "$basedir/$file" "$target_file"
   done
 }
 
