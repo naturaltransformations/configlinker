@@ -17,6 +17,7 @@ function link_files () {
     fi
 
     ln -s "$basedir/$file" "$target_file"
+    echo "linking $basedir/$file to $target_file"
   done
 }
 
@@ -25,7 +26,8 @@ while true ; do
     case "$1" in
     --link)
       shift
-      for dir in $@; do
+      config_dir="$1"
+      for dir in ${config_dir}/*/; do
         if [[ $dir =~ ^--.* ]]; then
           break
         fi
@@ -33,6 +35,10 @@ while true ; do
         link_files $dir
       done
     ;;
+    --help)
+      echo -e "Usage:\n --link {config_dir}  : config_dir contains user core directories"
+      exit 0
+      ;;
     --* | -* )
       echo "unknown option $1, please use --help."
       exit 1
