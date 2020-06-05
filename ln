@@ -24,7 +24,7 @@ function link_files () {
 
 while true ; do
     case "$1" in
-    --link)
+    --dirs)
       shift
       config_dir="$1"
       for dir in ${config_dir}/*/; do
@@ -35,8 +35,15 @@ while true ; do
         link_files $dir
       done
     ;;
+    --dir)
+      shift
+      config_dir="$1"
+      link_files $config_dir
+    ;;
     --help)
-      echo -e "Usage:\n --link {config_dir}  : config_dir contains user core directories"
+      echo "Usage:"
+      echo "    --dirs {parent_dir}  : parent_dir containing multiple config directories"
+      echo "    --dir  {config_dir}  : config_dir is a config directory"
       exit 0
       ;;
     --* | -* )
