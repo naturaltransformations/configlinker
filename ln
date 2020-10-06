@@ -19,6 +19,7 @@ function link_files () {
     ln -s "$basedir/$file" "$target_file"
     echo "linking $basedir/$file to $target_file"
   done
+  cd -
 }
 
 
